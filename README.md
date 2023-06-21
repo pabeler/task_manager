@@ -15,24 +15,24 @@ To run this application, you need:
 
 ## Getting Started
 
-###Clone repository
+### Clone repository
 
 ```bash
   git clone https://github.com/pabeler/task_manager.git
 ```
 
-###Navigate to application folder
+### Navigate to application folder
 
 ```bash
   cd task_manager
 ```
-###Configure the MongoDB database:
+### Configure the MongoDB database:
 
 Install MongoDB on your local machine if you have not already. You can download MongoDB from the [official website](https://www.mongodb.com/docs/manual/administration/install-community/).
 
 Start a local MongoDB instance on the default port 27017.
 
-###Run the backend (Spring Boot):
+### Run the backend (Spring Boot):
 
 Open the project in your favorite IDE (e.g., IntelliJ IDEA, Eclipse).
 
@@ -41,7 +41,7 @@ Perform a clean Maven install to download all the dependencies.
 Run the Spring Boot application by executing the TaskManagerApplication class as a Java application.
 
 The backend should start on the default port 8080.
-###Run the frontend (React):
+### Run the frontend (React):
 
 Navigate to the frontend directory:
 ```bash
@@ -57,4 +57,4 @@ Run the React application:
 ```
 The frontend application should start on port 3000.
 
-###Open a web browser and go to http://localhost:3000 to access the Task Manager application.
+### Open a web browser and go to http://localhost:3000 to access the Task Manager application.
