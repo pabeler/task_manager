@@ -1,10 +1,10 @@
 package pl.task_manager.springbackend.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import pl.task_manager.springbackend.model.Task;
 
-import java.util.List;
-
+@Repository
 public interface TaskRepository extends MongoRepository<Task, Integer> {
     Task findByTitle(String title);
 }
