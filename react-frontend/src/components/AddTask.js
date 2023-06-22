@@ -4,15 +4,12 @@ import DatePicker from 'react-datepicker';
 import sweetalert from "sweetalert2";
 import axios from "axios";
 import 'react-datepicker/dist/react-datepicker.css';
+import {convertDateToUnixTimestamp} from "./FunctionsToConvertingData";
 
 export default function AddTask() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [selectedDateTime, setSelectedDateTime] = useState(null);
-
-    const convertDateToUnixTimestamp = (date) => {
-        return Math.round(date.getTime() / 1000);
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
