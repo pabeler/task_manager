@@ -1,10 +1,10 @@
-package pl.Todo_List.springbackend;
+package pl.task_manager.springbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringBackendApplicationTests {
+class TaskManagerApplicationTests {
 
 	@Test
 	void contextLoads() {
