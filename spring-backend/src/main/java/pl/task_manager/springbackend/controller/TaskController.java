@@ -54,9 +54,21 @@ public class TaskController {
         if (task == null) {
             return ResponseEntity.notFound().build();
         }
-        task.setTitle(taskRequest.getTitle());
-        task.setDescription(taskRequest.getDescription());
-        task.setDeadlineDate(taskRequest.getDeadlineDate());
+        if (taskRequest.getTitle() != null) {
+            if (!taskRequest.getTitle().equalsIgnoreCase(title)) {
+                List<Task> taskList = taskRepository.findAll();
+                for (Task t : taskList) {
+                    if (t.getTitle().equalsIgnoreCase(taskRequest.getTitle())) {
+                        return ResponseEntity.badRequest().build();
+                    }
+                }
+            }
+            task.setTitle(taskRequest.getTitle());
+        }
+        if (taskRequest.getDescription() != null)
+            task.setDescription(taskRequest.getDescription());
+        if (taskRequest.getDeadlineDate() != 0)
+            task.setDeadlineDate(taskRequest.getDeadlineDate());
         return ResponseEntity.ok(taskRepository.save(task));
     }
 }
