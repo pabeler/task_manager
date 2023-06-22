@@ -7,8 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -22,6 +20,6 @@ public class Task {
 
     private String title;
     private String description;
-    private Date addedDate;
-    private Date deadlineDate;
+    private long addedDate;
+    private long deadlineDate;
 }
