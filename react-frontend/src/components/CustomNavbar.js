@@ -14,7 +14,7 @@ export default function CustomNavbar() {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link className="border rounded border-primary" href="#" style={{color: "white"}}>
+                        <Nav.Link className="border rounded border-primary" href="/new_task" style={{color: "white"}}>
                             Add new task
                         </Nav.Link>
                         <Nav.Link className="border rounded border-primary" href="#" style={{color: "white"}}>
