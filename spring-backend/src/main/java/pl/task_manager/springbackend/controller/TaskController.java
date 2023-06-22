@@ -1,5 +1,6 @@
 package pl.task_manager.springbackend.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,8 +9,10 @@ import pl.task_manager.springbackend.repository.TaskRepository;
 import pl.task_manager.springbackend.service.SequenceGenerator;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
@@ -33,7 +36,9 @@ public class TaskController {
                 return ResponseEntity.badRequest().build();
             }
         }
-        task.setAddedDate(Instant.now().getEpochSecond());
+        ZoneId zoneId = ZoneId.systemDefault();
+        long offset = zoneId.getRules().getOffset(Instant.now()).getTotalSeconds();
+        task.setAddedDate(Instant.now().getEpochSecond() + offset);
         task.setId(sequenceGenerator.generateSequence(Task.SEQUENCE_NAME));
         return ResponseEntity.ok(taskRepository.save(task));
     }
