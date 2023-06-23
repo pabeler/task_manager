@@ -47,7 +47,9 @@ export default function AddTask() {
                                 <Form.Label><h4>Title</h4></Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Type title here"
+                                    placeholder="Type title here (max 50 characters)"
+                                    pattern="[a-zA-Z].*"
+                                    maxLength="50"
                                     required={true}
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
@@ -61,7 +63,9 @@ export default function AddTask() {
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
-                                    placeholder="Type description of your task here"
+                                    placeholder="Type description of your task here (max 250 characters)"
+                                    pattern="[a-zA-Z].*"
+                                    maxLength="250"
                                     required={true}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
