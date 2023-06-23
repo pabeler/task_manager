@@ -8,7 +8,7 @@ import pl.task_manager.springbackend.filter.RequestCounterFilter;
 @Configuration
 public class WebConfig {
     @Bean
-    public FilterRegistrationBean<RequestCounterFilter> loggingFilter(){
+    public FilterRegistrationBean<RequestCounterFilter> loggingFilter() {
         FilterRegistrationBean<RequestCounterFilter> registrationBean
                 = new FilterRegistrationBean<>();
         registrationBean.setFilter(new RequestCounterFilter());

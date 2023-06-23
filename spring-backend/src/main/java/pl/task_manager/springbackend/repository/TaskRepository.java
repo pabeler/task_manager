@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.task_manager.springbackend.model.Task;
 
 @Repository
-public interface TaskRepository extends MongoRepository<Task, Integer> {}
+public interface TaskRepository extends MongoRepository<Task, Integer> {
+}

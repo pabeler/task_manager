@@ -161,53 +161,53 @@ export default function ShowTasks() {
 
     return (
         <>
-            <div style={{ marginLeft: "1vw", marginRight: "1vw" }}>
-            <BootstrapTable bootstrap4 keyField="id" data={data} columns={columns} pagination={paginationFactory(
-                {sizePerPage: 10, hideSizePerPage: true}
-            )}
-                filter={filterFactory()} expandRow={expandRow} rowStyle={{wordBreak: 'break-all'}}
-                cellEdit={cellEditFactory({
-                    mode: 'click',
-                    afterSaveCell: (oldValue, newValue, row, column) => {
-                        if (column.dataField === "description") {
-                            axios.put("http://localhost:8080/api/update/" + row.title, {
-                                id: row.id,
-                                title: row.title,
-                                description: newValue,
-                                deadlineDate: row.deadlineDate
-                            }).then(() => {
-                                sweetalert.fire('Success', 'Description updated correctly',
-                                    'success').then(() => {
-                                    window.location.reload();
-                                });
-                            }).catch(() => {
-                                sweetalert.fire('Error', 'Something went wrong!', 'error')
-                            });
-                        } else if (column.dataField === "title") {
-                            axios.put("http://localhost:8080/api/update/" + oldValue, {
-                                id: row.id,
-                                title: newValue,
-                                description: row.description,
-                                deadlineDate: row.deadlineDate
-                            }).then(() => {
-                                sweetalert.fire('Success', 'Title updated correctly',
-                                    'success').then(() => {
-                                    window.location.reload();
-                                });
-                            }).catch((reason) => {
-                                if (reason.response.status === 400) {
-                                    sweetalert.fire('Error', 'Task with this title already exists!',
-                                        'error').then(() => {
-                                        window.location.reload();
-                                    });
-                                } else {
-                                    sweetalert.fire('Error', 'Something went wrong!', 'error')
-                                }
-                            });
-                        }
-                    }
-                })}
-            />
+            <div style={{marginLeft: "1vw", marginRight: "1vw"}}>
+                <BootstrapTable bootstrap4 keyField="id" data={data} columns={columns} pagination={paginationFactory(
+                    {sizePerPage: 10, hideSizePerPage: true}
+                )}
+                                filter={filterFactory()} expandRow={expandRow} rowStyle={{wordBreak: 'break-all'}}
+                                cellEdit={cellEditFactory({
+                                    mode: 'click',
+                                    afterSaveCell: (oldValue, newValue, row, column) => {
+                                        if (column.dataField === "description") {
+                                            axios.put("http://localhost:8080/api/update/" + row.title, {
+                                                id: row.id,
+                                                title: row.title,
+                                                description: newValue,
+                                                deadlineDate: row.deadlineDate
+                                            }).then(() => {
+                                                sweetalert.fire('Success', 'Description updated correctly',
+                                                    'success').then(() => {
+                                                    window.location.reload();
+                                                });
+                                            }).catch(() => {
+                                                sweetalert.fire('Error', 'Something went wrong!', 'error')
+                                            });
+                                        } else if (column.dataField === "title") {
+                                            axios.put("http://localhost:8080/api/update/" + oldValue, {
+                                                id: row.id,
+                                                title: newValue,
+                                                description: row.description,
+                                                deadlineDate: row.deadlineDate
+                                            }).then(() => {
+                                                sweetalert.fire('Success', 'Title updated correctly',
+                                                    'success').then(() => {
+                                                    window.location.reload();
+                                                });
+                                            }).catch((reason) => {
+                                                if (reason.response.status === 400) {
+                                                    sweetalert.fire('Error', 'Task with this title already exists!',
+                                                        'error').then(() => {
+                                                        window.location.reload();
+                                                    });
+                                                } else {
+                                                    sweetalert.fire('Error', 'Something went wrong!', 'error')
+                                                }
+                                            });
+                                        }
+                                    }
+                                })}
+                />
             </div>
             <Modal show={show} onHide={() => handleShow(null)}>
                 <Modal.Header closeButton>

@@ -17,7 +17,8 @@ export default function CustomNavbar() {
                         <Nav.Link className="border rounded border-primary" href="/new_task" style={{color: "white"}}>
                             Add new task
                         </Nav.Link>
-                        <Nav.Link className="border rounded border-primary" href="/show_all_tasks" style={{color: "white"}}>
+                        <Nav.Link className="border rounded border-primary" href="/show_all_tasks"
+                                  style={{color: "white"}}>
                             Show all tasks
                         </Nav.Link>
                     </Nav>
