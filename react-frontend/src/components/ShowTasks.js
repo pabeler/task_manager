@@ -83,7 +83,7 @@ export default function ShowTasks() {
         dataField: 'id',
         text: 'ID',
         sort: true,
-        editable: false
+        editable: false,
     }, {
         dataField: 'title',
         text: 'Title',
@@ -161,6 +161,7 @@ export default function ShowTasks() {
 
     return (
         <>
+            <div style={{ marginLeft: "1vw", marginRight: "1vw" }}>
             <BootstrapTable bootstrap4 keyField="id" data={data} columns={columns} pagination={paginationFactory(
                 {sizePerPage: 10, hideSizePerPage: true}
             )}
@@ -207,6 +208,7 @@ export default function ShowTasks() {
                     }
                 })}
             />
+            </div>
             <Modal show={show} onHide={() => handleShow(null)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Insert new description here</Modal.Title>
