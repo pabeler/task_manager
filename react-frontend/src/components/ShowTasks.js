@@ -7,9 +7,19 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import sweetalert from "sweetalert2";
 import DatePicker from "react-datepicker";
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
-import {Button} from "react-bootstrap";
+import {Button, Form, Modal} from "react-bootstrap";
 
 export default function ShowTasks() {
+    const [description, setDescription] = useState('');
+    const [id, setId] = useState('');
+    const [show, setShow] = useState(false);
+
+    const handleShow = (row) => {
+        setId(row.id);
+        setDescription(row.description)
+        setShow(true);
+    }
+    const handleClose = () => setShow(false);
 
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -42,15 +52,19 @@ export default function ShowTasks() {
                 description: row.description,
                 deadlineDate: convertDateToUnixTimestamp(date)
             }).then(() => {
-                window.location.reload();
+                sweetalert.fire('Success', 'Correct change of deadline', 'success').then(
+                    () => {
+                        window.location.reload();
+                    }
+                );
             }).catch(() => {
                 sweetalert.fire('Error', 'Something went wrong!', 'error').then(() => {
-                    window.location.href = "/show_all_tasks";
+                    window.location.reload();
                 })
             });
         } else {
             sweetalert.fire('Error', 'Date and time must be in the future!', 'error').then(() => {
-                window.location.href = "/show_all_tasks";
+                window.location.reload();
             });
         }
     };
@@ -76,11 +90,8 @@ export default function ShowTasks() {
         filter: textFilter(),
         sort: true,
     }, {
-        dataField: 'description',
-        text: 'Description',
-    }, {
         dataField: 'addedDate',
-        text: 'Added date',
+        text: 'Date added',
         sort: true,
         formatter: dateFormatter,
         editable: false
@@ -105,66 +116,125 @@ export default function ShowTasks() {
     }, {
         dataField: 'delete',
         text: '',
+        editable: false,
         formatter: (cellContent, row) => (
-            <Button type={"submit"} onClick={() => handleDelete(row.id)}>Delete</Button>
+            <>
+                <Button variant="primary" onClick={() => handleShow(row)}>
+                    Edit description
+                </Button>
+                <Button variant="danger" onClick={() => handleDelete(row.id)}>
+                    Delete
+                </Button>
+            </>
         )
     }];
 
     const expandRow = {
         renderer: row => (
             <div style={{wordBreak: 'break-all'}}>
-                <p>{`${row.description}`}</p>
+                <strong>Description</strong>
+                <h6>{row.description}</h6>
             </div>
         ),
         showExpandColumn: true,
         expandByColumnOnly: true
     };
 
+    function handleDesciptionChange() {
+        if (description.length > 0) {
+            axios.put("http://localhost:8080/api/update/" + id, {
+                id: id,
+                description: description,
+                deadlineDate: 0
+            }).then(() => {
+                sweetalert.fire('Success', 'Description updated correctly',
+                    'success').then(() => {
+                    window.location.reload();
+                });
+            }).catch(() => {
+                sweetalert.fire('Error', 'Something went wrong!', 'error')
+            });
+        } else {
+            sweetalert.fire('Error', 'Description cannot be empty!', 'error')
+        }
+    }
+
     return (
         <>
-            <BootstrapTable bootstrap4 keyField="id" data={data} columns={columns} pagination={paginationFactory()}
-                            filter={filterFactory()} expandRow={expandRow} rowStyle={{wordBreak: 'break-all'}}
-                            cellEdit={cellEditFactory({
-                                mode: 'click',
-                                afterSaveCell: (oldValue, newValue, row, column) => {
-                                    if (column.dataField === "description") {
-                                        axios.put("http://localhost:8080/api/update/" + row.title, {
-                                            id: row.id,
-                                            title: row.title,
-                                            description: newValue,
-                                            deadlineDate: row.deadlineDate
-                                        }).then(() => {
-                                            sweetalert.fire('Success', 'Description updated correctly',
-                                                'success').then(() => {
-                                                window.location.href = "/show_all_tasks";
-                                            });
-                                        }).catch(() => {
-                                            sweetalert.fire('Error', 'Something went wrong!', 'error')
-                                        });
-                                    } else if (column.dataField === "title") {
-                                        axios.put("http://localhost:8080/api/update/" + oldValue, {
-                                            id: row.id,
-                                            title: newValue,
-                                            description: row.description,
-                                            deadlineDate: row.deadlineDate
-                                        }).then(() => {
-                                            sweetalert.fire('Success', 'Title updated correctly',
-                                                'success').then(() => {
-                                                window.location.href = "/show_all_tasks";
-                                            });
-                                        }).catch((reason) => {
-                                            if (reason.response.status === 400) {
-                                                sweetalert.fire('Error', 'Task with this title already exists!',
-                                                    'error').then(() => {
-                                                    window.location.href = "/show_all_tasks";
-                                                });
-                                            } else {
-                                                sweetalert.fire('Error', 'Something went wrong!', 'error')
-                                            }
-                                        });
-                                    }
+            <BootstrapTable bootstrap4 keyField="id" data={data} columns={columns} pagination={paginationFactory(
+                {sizePerPage: 10, hideSizePerPage: true}
+            )}
+                filter={filterFactory()} expandRow={expandRow} rowStyle={{wordBreak: 'break-all'}}
+                cellEdit={cellEditFactory({
+                    mode: 'click',
+                    afterSaveCell: (oldValue, newValue, row, column) => {
+                        if (column.dataField === "description") {
+                            axios.put("http://localhost:8080/api/update/" + row.title, {
+                                id: row.id,
+                                title: row.title,
+                                description: newValue,
+                                deadlineDate: row.deadlineDate
+                            }).then(() => {
+                                sweetalert.fire('Success', 'Description updated correctly',
+                                    'success').then(() => {
+                                    window.location.reload();
+                                });
+                            }).catch(() => {
+                                sweetalert.fire('Error', 'Something went wrong!', 'error')
+                            });
+                        } else if (column.dataField === "title") {
+                            axios.put("http://localhost:8080/api/update/" + oldValue, {
+                                id: row.id,
+                                title: newValue,
+                                description: row.description,
+                                deadlineDate: row.deadlineDate
+                            }).then(() => {
+                                sweetalert.fire('Success', 'Title updated correctly',
+                                    'success').then(() => {
+                                    window.location.reload();
+                                });
+                            }).catch((reason) => {
+                                if (reason.response.status === 400) {
+                                    sweetalert.fire('Error', 'Task with this title already exists!',
+                                        'error').then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    sweetalert.fire('Error', 'Something went wrong!', 'error')
                                 }
-                            })}/>
+                            });
+                        }
+                    }
+                })}
+            />
+            <Modal show={show} onHide={() => handleShow(null)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Insert new description here</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formDescription">
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                pattern="[a-zA-Z].*"
+                                maxLength="250"
+                                required={true}
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleDesciptionChange}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 }
