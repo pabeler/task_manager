@@ -9,7 +9,7 @@ The application allows adding, displaying, editing, and deleting tasks, as well 
 
 To run this application, you need:
 
-- Java Development Kit (JDK) 11 or higher
+- Java Development Kit (JDK) 17 or higher
 - Node.js and npm (Node Package Manager)
 - MongoDB database
 
