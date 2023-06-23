@@ -14,17 +14,22 @@ export default function AddTask() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedDateTime && selectedDateTime > new Date()) {
-            console.log(selectedDateTime);
-            console.log(convertDateToUnixTimestamp(selectedDateTime));
             axios.post("http://localhost:8080/api/add", {
                 title: title,
                 description: description,
                 deadlineDate: convertDateToUnixTimestamp(selectedDateTime)
-            }).then((response) => {
-                console.log(response.data);
-                sweetalert.fire('Success', 'Task added successfully!', 'success')
-            }).catch((error) => {
-                sweetalert.fire('Error', 'Something went wrong!', 'error')
+            }).then(() => {
+                sweetalert.fire('Success', 'Task added correctly', 'success').then(() => {
+                    window.location.href = "/show_all_tasks";
+                });
+            }).catch((reason) => {
+                if (reason.response.status === 400) {
+                    sweetalert.fire('Error', 'Title must be unique!', 'error').then(() => {
+                        window.location.href = "/new_task";
+                    });
+                } else {
+                    sweetalert.fire('Error', 'Something went wrong!', 'error')
+                }
             });
         } else {
             sweetalert.fire('Error', 'Date and time must be in the future!', 'error')
@@ -33,13 +38,13 @@ export default function AddTask() {
 
     return (
         <>
-            <div className="container mt-5 full-screen" style={{minHeight: "70vh"}}>
+            <div className="container mt-5 full-screen">
                 <Card>
-                    <Card.Header><h1>Add new task</h1></Card.Header>
+                    <Card.Header><h3>Add new task</h3></Card.Header>
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="formTitle">
-                                <Form.Label><h2>Title</h2></Form.Label>
+                                <Form.Label><h4>Title</h4></Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Type title here"
@@ -52,7 +57,7 @@ export default function AddTask() {
                             <br/>
 
                             <Form.Group controlId="formDescription">
-                                <Form.Label><h2>Description</h2></Form.Label>
+                                <Form.Label><h4>Description</h4></Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
@@ -66,7 +71,7 @@ export default function AddTask() {
                             <br/>
 
                             <Form.Group controlId="formDateTime">
-                                <Form.Label><h2>Deadline date</h2></Form.Label>
+                                <Form.Label><h4>Deadline date</h4></Form.Label>
                                 <br/>
                                 <DatePicker
                                     minDate={new Date()}
@@ -76,7 +81,6 @@ export default function AddTask() {
                                     timeFormat="HH:mm"
                                     timeIntervals={15}
                                     dateFormat="yyyy-MM-dd HH:mm"
-                                    placeholderText="Wybierz datę i czas"
                                 />
                             </Form.Group>
                             <br/>
