@@ -5,6 +5,4 @@ import org.springframework.stereotype.Repository;
 import pl.task_manager.springbackend.model.Task;
 
 @Repository
-public interface TaskRepository extends MongoRepository<Task, Integer> {
-    Task findByTitle(String title);
-}
+public interface TaskRepository extends MongoRepository<Task, Integer> {}
